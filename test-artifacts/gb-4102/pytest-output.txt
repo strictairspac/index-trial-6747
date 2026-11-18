@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /workspace
+plugins: anyio-4.16.0
+collecting ... collected 16 items
+
+test-artifacts/gb-4102/test_recovery.py::test_accept_while_queue_down_then_auto_run PASSED [  6%]
+test-artifacts/gb-4102/test_recovery.py::test_health_degraded_when_queue_down PASSED [ 12%]
+test-artifacts/gb-4102/test_recovery.py::test_same_acceptance_no_is_idempotent PASSED [ 18%]
+test-artifacts/gb-4102/test_recovery.py::test_same_no_different_candidate_rejected PASSED [ 25%]
+test-artifacts/gb-4102/test_recovery.py::test_same_no_different_workload_rejected PASSED [ 31%]
+test-artifacts/gb-4102/test_recovery.py::test_viewer_cannot_accept PASSED [ 37%]
+test-artifacts/gb-4102/test_recovery.py::test_crash_after_index_create_is_resumed_with_same_id PASSED [ 43%]
+test-artifacts/gb-4102/test_recovery.py::test_baseline_never_runs_with_residual_index PASSED [ 50%]
+test-artifacts/gb-4102/test_recovery.py::test_live_old_connection_blocks_takeover PASSED [ 56%]
+test-artifacts/gb-4102/test_recovery.py::test_two_workers_only_one_claims PASSED [ 62%]
+test-artifacts/gb-4102/test_recovery.py::test_reconcile_when_redis_lost_data PASSED [ 68%]
+test-artifacts/gb-4102/test_recovery.py::test_reconcile_after_pop_without_claim PASSED [ 75%]
+test-artifacts/gb-4102/test_recovery.py::test_duplicate_queue_messages_run_once PASSED [ 81%]
+test-artifacts/gb-4102/test_recovery.py::test_migration_idempotent_and_backfills_acceptance_no PASSED [ 87%]
+test-artifacts/gb-4102/test_recovery.py::test_stale_run_skips_takeover_while_lock_busy_then_succeeds PASSED [ 93%]
+test-artifacts/gb-4102/test_recovery.py::test_single_published_result_after_retries PASSED [100%]
+
+=============================== warnings summary ===============================
+test-artifacts/gb-4102/test_recovery.py::test_accept_while_queue_down_then_auto_run
+  /tmp/pylibs/lib/python3.11/site-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 16 passed, 1 warning in 3.98s =========================

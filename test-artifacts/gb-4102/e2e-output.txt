@@ -1,0 +1,17 @@
+queue unavailable; experiment 1 stays queued in DB
+experiment 4 lease stale but old connection still working; skip takeover
+{'users': 3, 'workloads': 3, 'candidates': 3, 'telemetry': 5000, 'experiments': 0}
+== 场景1：受理后断队列 ==
+  队列断开仍受理：试验 #1 状态 queued，健康检查 {'status': 'ok', 'queue': 'degraded'}
+  队列恢复后自动开跑并完成：#1 completed，结果行数 50
+== 规则：同号幂等 / 换候选或负载拒绝 ==
+  同号重试返回同一试验 #2；换候选被 409：受理号 E2E-IDEM 已用于其他负载，不能重复受理
+  完成后同号重试不新增、不覆盖：仍是 #2 同一份结果
+== 场景2：建完索引就退出（硬杀死） ==
+  重建崩溃现场：#3 running、租约过期、trial_candidate 残留
+  新 worker 接管同一试验 #3 并完成，遗留索引已清理，只此一份结果
+== 场景3：旧执行连接未退出 ==
+  旧连接持锁工作中：#4 接管被拒绝，状态保持 running
+  旧连接退出后自动接管：#4 completed，worker=7ac09a35d1aa-1544-04fe6a01
+
+全部端到端断言通过。

@@ -2,13 +2,16 @@ import os,logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import text
-from src.config.database import engine
+from src.config.database import Base,engine
+from src.config.migrations import upgrade
 from src.services.experiments import queue
 from src.routes import auth,workloads,candidates,experiments,audit
 from src.middlewares.errors import install_errors
 from src.middlewares.requests import RequestTrace
 @asynccontextmanager
 async def lifespan(app):
+ Base.metadata.create_all(engine)
+ upgrade()
  if os.getenv('SEED_DEMO','true').lower()=='true':
   try:
    from scripts.seed_demo import seed
@@ -21,4 +24,7 @@ for r in (auth,workloads,candidates,experiments,audit):app.include_router(r.rout
 @app.get('/health')
 def health():
  with engine.connect() as c:c.execute(text('SELECT 1'))
- queue.ping();return {'status':'ok'}
+ redis_ok=True
+ try:queue.ping()
+ except Exception:redis_ok=False
+ return {'status':'ok','queue':'up' if redis_ok else 'degraded'}
